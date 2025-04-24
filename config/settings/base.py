@@ -328,8 +328,3 @@ COMPRESS_URL = STATIC_URL
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-# Twitter API credentials (completar con tus credenciales)
-TWITTER_API_KEY = "change_me"
-TWITTER_API_SECRET_KEY = "change_me"  # noqa: S105
-TWITTER_ACCESS_TOKEN = "change_me"  # noqa: S105
-TWITTER_ACCESS_TOKEN_SECRET = "change_me"  # noqa: S105
