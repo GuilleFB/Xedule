@@ -1,0 +1,74 @@
+<!-- templates/tweets/tweet_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+  Lista de Tweets
+{% endblock title %}
+{% block content %}
+  <div class="row mb-4">
+    <div class="col">
+      <h1>Tweets</h1>
+    </div>
+    <div class="col-auto">
+      <a href="{% url 'tweet_create' %}" class="btn btn-primary">Nuevo Tweet</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      {% if tweets %}
+        <div class="list-group">
+          {% for tweet in tweets %}
+            <div class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Tweet #{{ tweet.id }}</h5>
+                <small>
+                  {% if tweet.status == 'pending' %}
+                    <span class="badge bg-warning">Pendiente</span>
+                  {% else %}
+                    <span class="badge bg-success">Publicado</span>
+                  {% endif %}
+                </small>
+              </div>
+              <p class="mb-1">{{ tweet.content }}</p>
+              {% if tweet.scheduled_time %}<small>Programado para: {{ tweet.scheduled_time }}</small>{% endif %}
+              <div class="mt-2">
+                <a href="{% url 'tweet_detail' tweet.id %}" class="btn btn-sm btn-info">Ver</a>
+                <a href="{% url 'tweet_update' tweet.id %}"
+                   class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{% url 'tweet_delete' tweet.id %}"
+                   class="btn btn-sm btn-danger">Eliminar</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        {% if is_paginated %}
+          <nav class="mt-4">
+            <ul class="pagination">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page=1">« Primera</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                </li>
+              {% endif %}
+              <li class="page-item active">
+                <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+              </li>
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última »</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        {% endif %}
+      {% else %}
+        <div class="alert alert-info">No hay tweets disponibles. ¡Crea uno nuevo!</div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content %}

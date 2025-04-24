@@ -1,0 +1,57 @@
+<!-- templates/tweets/tweet_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+  Tweet #{{ tweet.id }}
+{% endblock title %}
+{% block content %}
+  <div class="row mb-4">
+    <div class="col">
+      <h1>Tweet Detail</h1>
+    </div>
+    <div class="col-auto">
+      <a href="{% url 'tweet_list' %}" class="btn btn-secondary">Back to list</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <span>Tweet #{{ tweet.id }}</span>
+      {% if tweet.status == 'pending' %}
+        <span class="badge bg-warning">Pending</span>
+      {% else %}
+        <span class="badge bg-success">Published</span>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ tweet.content }}</p>
+      <dl class="row mt-4">
+        <dt class="col-sm-3">Created on:</dt>
+        <dd class="col-sm-9">
+          {{ tweet.created_at }}
+        </dd>
+        {% if tweet.scheduled_time %}
+          <dt class="col-sm-3">Scheduled for:</dt>
+          <dd class="col-sm-9">
+            {{ tweet.scheduled_time }}
+          </dd>
+        {% endif %}
+        {% if tweet.published_at %}
+          <dt class="col-sm-3">Published on:</dt>
+          <dd class="col-sm-9">
+            {{ tweet.published_at }}
+          </dd>
+        {% endif %}
+        {% if tweet.tweet_id %}
+          <dt class="col-sm-3">Tweet ID:</dt>
+          <dd class="col-sm-9">
+            {{ tweet.tweet_id }}
+          </dd>
+        {% endif %}
+      </dl>
+    </div>
+    <div class="card-footer">
+      <a href="{% url 'tweet_update' tweet.id %}" class="btn btn-primary">Edit</a>
+      <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+{% endblock content %}
