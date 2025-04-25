@@ -11,6 +11,9 @@
         <button id="selectAllBtn" class="btn btn-outline-primary me-2">Seleccionar todos</button>
         <button id="deselectAllBtn" class="btn btn-outline-secondary">Deseleccionar todos</button>
       </div>
+      <a href="{% url 'tweet_bulk_upload' %}" class="btn btn-success">
+        <i class="bi bi-file-earmark-excel"></i> Carga Masiva
+      </a>
     </div>
     {% if tweets %}
       <form method="post"
