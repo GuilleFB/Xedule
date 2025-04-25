@@ -7,10 +7,12 @@
 {% block content %}
   <div class="row mb-4">
     <div class="col">
-      <h1>Bulk Upload Tweets</h1>
+      <h1 class="h4 fw-bold">Bulk Upload Tweets</h1>
     </div>
     <div class="col-auto">
-      <a href="{% url 'tweet_list' %}" class="btn btn-secondary">Back to list</a>
+      <a href="{% url 'tweet_list' %}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to list
+      </a>
     </div>
   </div>
   <div class="card mb-4">
@@ -19,20 +21,27 @@
     </div>
     <div class="card-body">
       <p>Upload an Excel file (.xlsx) with tweets to schedule. The file should contain the following columns:</p>
-      <ul>
-        <li>
-          <strong>content</strong> (required): The tweet text (maximum 280 characters)
-        </li>
-        <li>
-          <strong>scheduled_time</strong> (optional): When to publish the tweet (format: YYYY-MM-DD HH:MM:SS)
-        </li>
-      </ul>
-      <p>
-        <a href="{% url 'download_template' %}"
-           class="btn btn-sm btn-outline-primary">
-          <i class="bi bi-download"></i> Download Template Excel
-        </a>
-      </p>
+      <div class="mb-3">
+        <div class="d-flex mb-2">
+          <div class="w-24 me-3 custom-width-24">
+            <i class="bi bi-file-text text-primary"></i>
+          </div>
+          <div>
+            <strong>content</strong> (required): The tweet text (maximum 280 characters)
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="me-3 custom-width-24">
+            <i class="bi bi-clock text-primary"></i>
+          </div>
+          <div>
+            <strong>scheduled_time</strong> (optional): When to publish the tweet (format: YYYY-MM-DD HH:MM:SS)
+          </div>
+        </div>
+      </div>
+      <a href="{% url 'download_template' %}" class="btn btn-outline-primary">
+        <i class="bi bi-download"></i> Download Template Excel
+      </a>
     </div>
   </div>
   <div class="card">
@@ -50,7 +59,9 @@
                  required />
           {% if form.excel_file.help_text %}<div class="form-text">{{ form.excel_file.help_text }}</div>{% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">Upload and Process</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-upload"></i> Upload and Process
+        </button>
       </form>
     </div>
   </div>

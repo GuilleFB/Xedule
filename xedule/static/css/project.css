@@ -1,13 +1,332 @@
-/* These styles are generated from project.scss. */
+/* Xedule - Twitter-like styling */
+
+:root {
+  --x-background: #15202b;
+  --x-card-bg: #192734;
+  --x-text: #ffffff;
+  --x-text-secondary: #8899a6;
+  --x-border: #38444d;
+  --x-accent: #1da1f2;
+  --x-accent-hover: #1a91da;
+  --x-danger: #e0245e;
+  --x-success: #17bf63;
+  --x-warning: #ffad1f;
+}
+
+body {
+  background-color: var(--x-background);
+  color: var(--x-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: rgba(21, 32, 43, 0.95) !important;
+  border-bottom: 1px solid var(--x-border);
+  padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+  color: var(--x-text) !important;
+  font-weight: bold;
+}
+
+.nav-link {
+  color: var(--x-text) !important;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem !important;
+}
+
+.nav-link:hover {
+  background-color: rgba(29, 161, 242, 0.1);
+}
+
+.nav-link.active {
+  color: var(--x-accent) !important;
+  font-weight: 600;
+}
+
+/* Card styling */
+.card {
+  background-color: var(--x-card-bg);
+  border: 1px solid var(--x-border);
+  border-radius: 16px;
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  background-color: var(--x-card-bg);
+  border-bottom: 1px solid var(--x-border);
+  padding: 0.75rem 1rem;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+/* Button styling */
+.btn {
+  border-radius: 9999px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+}
+
+.btn-primary {
+  background-color: var(--x-accent);
+  border-color: var(--x-accent);
+}
+
+.btn-primary:hover {
+  background-color: var(--x-accent-hover);
+  border-color: var(--x-accent-hover);
+}
+
+.btn-outline-primary {
+  color: var(--x-accent);
+  border-color: var(--x-accent);
+}
+
+.btn-outline-primary:hover {
+  background-color: rgba(29, 161, 242, 0.1);
+  color: var(--x-accent);
+  border-color: var(--x-accent);
+}
+
+.btn-danger {
+  background-color: var(--x-danger);
+  border-color: var(--x-danger);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border-color: var(--x-border);
+  color: var(--x-text);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--x-border);
+  color: var(--x-text);
+}
+
+/* Form controls */
+.form-control {
+  background-color: var(--x-background);
+  border: 1px solid var(--x-border);
+  border-radius: 9999px;
+  color: var(--x-text);
+}
+
+.form-control:focus {
+  background-color: var(--x-background);
+  border-color: var(--x-accent);
+  color: var(--x-text);
+  box-shadow: 0 0 0 0.25rem rgba(29, 161, 242, 0.25);
+}
+
+textarea.form-control {
+  border-radius: 16px;
+}
+
+.form-label {
+  color: var(--x-text-secondary);
+}
+
+.form-text {
+  color: var(--x-text-secondary);
+}
+
+/* Alert styling */
+.alert {
+  border-radius: 16px;
+}
 
 .alert-debug {
-  color: black;
-  background-color: white;
-  border-color: #d6e9c6;
+  color: var(--x-text);
+  background-color: var(--x-card-bg);
+  border-color: var(--x-border);
 }
 
 .alert-error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
+  color: #ffffff;
+  background-color: var(--x-danger);
+  border-color: var(--x-danger);
+}
+
+.alert-success {
+  color: #ffffff;
+  background-color: var(--x-success);
+  border-color: var(--x-success);
+}
+
+.alert-warning {
+  color: #15202b;
+  background-color: var(--x-warning);
+  border-color: var(--x-warning);
+}
+
+/* Tweet styling */
+.tweet-color {
+  color: var(--x-text-secondary);
+}
+
+.tweet-card {
+  border-bottom: 1px solid var(--x-border);
+  padding: 1rem;
+  transition: background-color 0.2s;
+}
+
+.tweet-card:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.tweet-content {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  color: var(--x-text);
+}
+
+.tweet-actions {
+  display: flex;
+  justify-content: space-between;
+  color: var(--x-text-secondary);
+  font-size: 0.9rem;
+}
+
+.tweet-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tweet-status.pending {
+  background-color: rgba(255, 173, 31, 0.2);
+  color: var(--x-warning);
+}
+
+.tweet-status.published {
+  background-color: rgba(23, 191, 99, 0.2);
+  color: var(--x-success);
+}
+
+.tweet-status.failed {
+  background-color: rgba(224, 36, 94, 0.2);
+  color: var(--x-danger);
+}
+
+/* Table styling */
+.table {
+  color: var(--x-text);
+  border-color: var(--x-border);
+}
+
+.table th {
+  border-color: var(--x-border);
+  color: var(--x-text-secondary);
+  font-weight: 600;
+}
+
+.table td {
+  border-color: var(--x-border);
+  vertical-align: middle;
+}
+
+/* Pagination */
+.pagination .page-link {
+  background-color: var(--x-card-bg);
+  border-color: var(--x-border);
+  color: var(--x-text);
+}
+
+.pagination .page-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--x-accent);
+  border-color: var(--x-accent);
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: var(--x-card-bg);
+  color: var(--x-text-secondary);
+}
+
+/* Blockquote */
+blockquote {
+  border-left: 4px solid var(--x-accent);
+  padding-left: 1rem;
+  color: var(--x-text-secondary);
+}
+
+/* Custom text colors */
+.text-muted {
+  color: var(--x-text-secondary) !important;
+}
+
+/* Custom background utility */
+.bg-x-dark {
+  background-color: var(--x-background);
+}
+
+/* Login/signup forms */
+.entrance-container {
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+/* Dark mode overrides for Bootstrap components */
+.dropdown-menu {
+  background-color: var(--x-card-bg);
+  border-color: var(--x-border);
+}
+
+.dropdown-item {
+  color: var(--x-text);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--x-text);
+}
+
+/* Badge styling */
+.badge {
+  border-radius: 9999px;
+  padding: 0.35em 0.65em;
+}
+
+.bg-primary {
+  background-color: var(--x-accent) !important;
+}
+
+.bg-success {
+  background-color: var(--x-success) !important;
+}
+
+.bg-danger {
+  background-color: var(--x-danger) !important;
+}
+
+.bg-warning {
+  background-color: var(--x-warning) !important;
+}
+
+/* Lists */
+ul.list-unstyled li {
+  padding: 0.5rem 0;
+}
+
+.custom-width-24 {
+  width: 24px;
+}
+
+.custom-width-40 {
+  width: 40px;
+}
+
+.custom-width-48 {
+  width: 48px;
 }
