@@ -196,8 +196,3 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-# Twitter API credentials (complete with your credentials)
-TWITTER_API_KEY = env("TWITTER_API_KEY")
-TWITTER_API_SECRET_KEY = env("TWITTER_API_SECRET_KEY")
-TWITTER_ACCESS_TOKEN = env("TWITTER_ACCESS_TOKEN")
-TWITTER_ACCESS_TOKEN_SECRET = env("TWITTER_ACCESS_TOKEN_SECRET")

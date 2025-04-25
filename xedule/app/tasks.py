@@ -14,19 +14,86 @@ MAX_RETRIES = 3
 BACKOFF_BASE = 2  # seconds
 
 
-@shared_task
-def publish_tweet():
-    client = tweepy.Client(
+def get_twitter_client():
+    """Create and return a Twitter API client."""
+    return tweepy.Client(
         consumer_key=settings.TWITTER_API_KEY,
         consumer_secret=settings.TWITTER_API_SECRET_KEY,
         access_token=settings.TWITTER_ACCESS_TOKEN,
         access_token_secret=settings.TWITTER_ACCESS_TOKEN_SECRET,
     )
 
-    pending_tweets = Tweet.objects.filter(
+
+def get_pending_tweets():
+    """Retrieve tweets that are ready to be published."""
+    return Tweet.objects.filter(
         status="pending",
         scheduled_time__lte=timezone.now(),
     )
+
+
+def post_single_tweet(client, tweet):
+    """
+    Attempt to post a single tweet with retry logic.
+    Returns a tuple of (success_status, error_message)
+    """
+    for retry in range(MAX_RETRIES):
+        try:
+            response = client.create_tweet(text=tweet.content)
+
+            # Update tweet record on success
+            tweet.status = "published"
+            tweet.published_at = timezone.now()
+            tweet.tweet_id = response.data["id"]
+            tweet.last_error = ""
+            tweet.save()
+        except tweepy.errors.TweepyException as e:
+            error_message = str(e)
+            tweet.last_error = error_message
+            tweet.save()
+
+            wait_time = BACKOFF_BASE ** (retry + 1)
+            logger.exception(
+                "Error when posting tweet %(tweet_id)s: %(error)s - Retrying in %(wait_time)s seconds...",
+                extra={
+                    "tweet_id": tweet.id,
+                    "error": error_message,
+                    "wait_time": wait_time,
+                },
+            )
+            time.sleep(wait_time)
+            continue
+        except Exception as e:
+            error_message = str(e)
+            tweet.last_error = error_message
+            tweet.save()
+
+            logger.exception(
+                "Error inesperado al publicar tweet %(tweet_id)s",
+                extra={"tweet_id": tweet.id},
+            )
+            return False, error_message
+        else:
+            # This block executes if no exception occurs in the try block
+            logger.info("Tweet %s successfully published.", tweet.id)
+            return True, None
+
+    # If we've exhausted all retries
+    logger.error(
+        "Could not post the tweet %(tweet_id)s after %(max_retries)s attempts.",
+        extra={"tweet_id": tweet.id, "max_retries": MAX_RETRIES},
+    )
+    return False, tweet.last_error
+
+
+@shared_task
+def publish_tweet():
+    """
+    Task to publish pending tweets.
+    Returns a status message about how many tweets were published.
+    """
+    client = get_twitter_client()
+    pending_tweets = get_pending_tweets()
 
     if not pending_tweets.exists():
         return "There are no tweets pending to be published."
@@ -34,50 +101,9 @@ def publish_tweet():
     published_count = 0
 
     for tweet in pending_tweets:
-        retries = 0
-        success = False
-
-        while retries < MAX_RETRIES and not success:
-            try:
-                response = client.create_tweet(text=tweet.content)
-
-                tweet.status = "published"
-                tweet.published_at = timezone.now()
-                tweet.tweet_id = response.data["id"]
-                tweet.last_error = ""
-                tweet.save()
-
-                published_count += 1
-                success = True
-                logger.error("Tweet %s successfully published.", tweet.id)
-            except tweepy.errors.TweepyException as e:
-                tweet.last_error = str(e)
-                tweet.save()
-                retries += 1
-                wait_time = BACKOFF_BASE**retries
-                logger.exception(
-                    "Error when posting tweet %(tweet_id)s: %(error)s - Retrying in %(wait_time)s seconds...",
-                    extra={
-                        "tweet_id": tweet.id,
-                        "error": str(e),
-                        "wait_time": wait_time,
-                    },
-                )
-                time.sleep(wait_time)
-            except Exception as e:
-                tweet.last_error = str(e)
-                tweet.save()
-                logger.exception(
-                    "Error inesperado al publicar tweet %(tweet_id)s",
-                    extra={"tweet_id": tweet.id},
-                )
-                break  # Do not continue if it is an unexpected error
-
-        if not success:
-            logger.error(
-                "Could not post the tweet %(tweet_id)s after %(max_retries)s attempts.",
-                extra={"tweet_id": tweet.id, "max_retries": MAX_RETRIES},
-            )
+        success, _ = post_single_tweet(client, tweet)
+        if success:
+            published_count += 1
 
     return f"Se publicaron {published_count} tweets"
 
@@ -85,6 +111,6 @@ def publish_tweet():
 @shared_task
 def schedule_pending_tweets():
     """
-    Tarea periódica para revisar y publicar tweets programados
+    Periodic task to check and publish scheduled tweets
     """
     return publish_tweet.delay()

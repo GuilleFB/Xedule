@@ -29,4 +29,9 @@ urlpatterns = [
         views.DownloadTemplateView.as_view(),
         name="download_template",
     ),
+    path(
+        "twitter-credentials/",
+        views.TwitterCredentialsUpdateView.as_view(),
+        name="twitter_credentials",
+    ),
 ]
