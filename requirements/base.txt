@@ -20,3 +20,5 @@ crispy-bootstrap5==2025.4  # https://github.com/django-crispy-forms/crispy-boots
 django-compressor==4.5.1  # https://github.com/django-compressor/django-compressor
 django-redis==5.4.0  # https://github.com/jazzband/django-redis
 tweepy==4.15.0  # https://github.com/tweepy/tweepy
+pandas==2.2.3  # https://github.com/pandas-dev/pandas
+openpyxl==3.1.5  # https://foss.heptapod.net/openpyxl/openpyxl

@@ -13,4 +13,14 @@ urlpatterns = [
         views.TweetDeleteView.as_view(),
         name="tweet_delete",
     ),
+    path(
+        "tweet/bulk-upload/",
+        views.TweetBulkUploadView.as_view(),
+        name="tweet_bulk_upload",
+    ),
+    path(
+        "tweet/download-template/",
+        views.DownloadTemplateView.as_view(),
+        name="download_template",
+    ),
 ]
