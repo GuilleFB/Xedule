@@ -1,7 +1,10 @@
 # tweets/views.py
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
 from django.views.generic import DetailView
@@ -26,7 +29,7 @@ class TweetListView(LoginRequiredMixin, ListView):
     model = Tweet
     template_name = "app/tweet_list.html"
     context_object_name = "tweets"
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         return Tweet.objects.filter(user=self.request.user).order_by("-created_at")
@@ -68,3 +71,16 @@ class TweetDeleteView(LoginRequiredMixin, UserOwnsTweetMixin, DeleteView):
     def get_queryset(self):
         # Solo permite borrar tweets del usuario actual
         return super().get_queryset().filter(user=self.request.user)
+
+
+class BulkDeleteTweetsView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        tweet_ids = request.POST.getlist("tweet_ids")
+        if tweet_ids:
+            tweets = Tweet.objects.filter(id__in=tweet_ids, user=request.user)
+            count = tweets.count()
+            tweets.delete()
+            messages.success(request, f"{count} tweet(s) eliminados correctamente.")
+        else:
+            messages.warning(request, "No se seleccionaron tweets para eliminar.")
+        return redirect("tweet_list")

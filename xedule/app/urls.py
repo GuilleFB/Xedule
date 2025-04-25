@@ -13,4 +13,10 @@ urlpatterns = [
         views.TweetDeleteView.as_view(),
         name="tweet_delete",
     ),
+    # En app/urls.py, añade esta nueva URL:
+    path(
+        "tweets/bulk-delete/",
+        views.BulkDeleteTweetsView.as_view(),
+        name="bulk_delete_tweets",
+    ),
 ]
