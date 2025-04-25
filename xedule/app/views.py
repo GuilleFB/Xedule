@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
@@ -18,7 +19,9 @@ from django.views.generic.edit import FormView
 
 from .forms import ExcelUploadForm
 from .forms import TweetForm
+from .forms import TwitterCredentialsForm
 from .models import Tweet
+from .models import TwitterCredentials
 from .utils import process_excel_file
 
 EXCEPTION = "You do not have permission to modify/delete this tweet"
@@ -176,3 +179,17 @@ class DownloadTemplateView(View):
         )
 
         return response
+
+
+class TwitterCredentialsUpdateView(LoginRequiredMixin, UpdateView):
+    model = TwitterCredentials
+    form_class = TwitterCredentialsForm
+    template_name = "app/twitter_credentials_form.html"
+
+    def get_object(self, queryset=None):
+        obj, _ = TwitterCredentials.objects.get_or_create(user=self.request.user)
+        return obj
+
+    def get_success_url(self):
+        messages.success(self.request, "Twitter credentials updated successfully.")
+        return reverse("users:detail", kwargs={"username": self.request.user.username})
