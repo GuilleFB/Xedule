@@ -1,4 +1,3 @@
-
 # define an alias for the specific python version used in this file.
 FROM docker.io/python:3.12.10-slim-bookworm AS python
 
@@ -12,8 +11,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
   build-essential \
   # psycopg dependencies
-  libpq-dev
-
+  libpq-dev \
+  pkg-config \
+  libffi-dev
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements .
@@ -37,7 +37,6 @@ WORKDIR ${APP_HOME}
 
 RUN addgroup --system django \
   && adduser --system --ingroup django django
-
 
 # Install required system dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -68,6 +67,8 @@ RUN chmod +x /entrypoint
 COPY --chown=django:django ./compose/production/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
+
+
 COPY --chown=django:django ./compose/production/django/celery/worker/start /start-celeryworker
 RUN sed -i 's/\r$//g' /start-celeryworker
 RUN chmod +x /start-celeryworker
