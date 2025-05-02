@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block content %}
   <div class="container">
-    <h1>Mis Tweets</h1>
+    <h1>My Notes</h1>
     <div class="mb-3 d-flex justify-content-between">
       <div>
-        <a href="{% url 'tweet_create' %}" class="btn btn-primary">Nuevo Tweet</a>
+        <a href="{% url 'tweet_create' %}" class="btn btn-primary">Nuevo Note</a>
       </div>
       <div>
         <button id="selectAllBtn" class="btn btn-outline-primary me-2">Seleccionar todos</button>
@@ -28,39 +30,53 @@
                   <input type="checkbox" id="selectAll" />
                 </th>
                 <th>Contenido</th>
+                <th>Publicar en</th>
                 <th>Estado</th>
                 <th>Fecha programada</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {% for tweet in tweets %}
+              {% for note in tweets %}
                 <tr>
                   <td>
                     <input type="checkbox"
                            name="tweet_ids"
-                           value="{{ tweet.id }}"
-                           class="tweet-checkbox" />
+                           value="{{ note.id }}"
+                           class="note-checkbox" />
                   </td>
                   <td>
-                    <a href="{% url 'tweet_detail' tweet.id %}">{{ tweet.content|truncatechars:50 }}</a>
+                    <a href="{% url 'tweet_detail' note.id %}">{{ note.content|truncatechars:50 }}</a>
                   </td>
                   <td>
-                    {% if tweet.status == 'pending' %}
-                      <span class="badge bg-warning text-dark">Pendiente</span>
-                    {% elif tweet.status == 'published' %}
-                      <span class="badge bg-success">Publicado</span>
-                    {% else %}
-                      <span class="badge bg-secondary">{{ tweet.get_status_display }}</span>
+                    {% if note.publish_to_x %}
+                      <img src="{% static "/images/gorjeo.png" %}"
+                           height="25"
+                           class="d-inline-block align-top"
+                           alt="Nostr" />
+                    {% endif %}
+                    {% if note.publish_to_nostr %}
+                      <img src="https://camo.githubusercontent.com/8fc030d170b472876019dc1ff3b0b67d925034c8d441e6709bbb0a0631904b5b/68747470733a2f2f6e6f7374722e6275696c642f692f6e6f7374722e6275696c645f633538646131626162343238653766313835393664376562383062303536633530666239623939383535326261336230373764656532613163316538373066642e676966"
+                           height="25"
+                           class="d-inline-block align-top ms-2"
+                           alt="Nostr" />
                     {% endif %}
                   </td>
-                  <td>{{ tweet.scheduled_time|default:"N/A" }}</td>
                   <td>
-                    <a href="{% url 'tweet_detail' tweet.id %}" class="btn btn-sm btn-info">Ver</a>
-                    <a href="{% url 'tweet_update' tweet.id %}"
+                    {% if note.status == 'pending' %}
+                      <span class="badge bg-warning text-dark">Pendiente</span>
+                    {% elif note.status == 'published' %}
+                      <span class="badge bg-success">Publicado</span>
+                    {% else %}
+                      <span class="badge bg-secondary">{{ note.get_status_display }}</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ note.scheduled_time|default:"N/A" }}</td>
+                  <td>
+                    <a href="{% url 'tweet_detail' note.id %}" class="btn btn-sm btn-info">Ver</a>
+                    <a href="{% url 'tweet_update' note.id %}"
                        class="btn btn-sm btn-warning">Editar</a>
-                    <a href="{% url 'tweet_delete' tweet.id %}"
-                       class="btn btn-sm btn-danger">Eliminar</a>
+                    <a href="{% url 'tweet_delete' note.id %}" class="btn btn-sm btn-danger">Eliminar</a>
                   </td>
                 </tr>
               {% endfor %}
@@ -81,12 +97,12 @@
       const selectAllCheckbox = document.getElementById('selectAll');
       const selectAllButton = document.getElementById('selectAllBtn');
       const deselectAllButton = document.getElementById('deselectAllBtn');
-      const tweetCheckboxes = document.querySelectorAll('.tweet-checkbox');
+      const tweetCheckboxes = document.querySelectorAll('.note-checkbox');
       const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
 
       // Función para actualizar el estado del botón de eliminar
       function updateDeleteButtonState() {
-        const checkedBoxes = document.querySelectorAll('.tweet-checkbox:checked');
+        const checkedBoxes = document.querySelectorAll('.note-checkbox:checked');
         bulkDeleteBtn.disabled = checkedBoxes.length === 0;
       }
 

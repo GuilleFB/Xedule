@@ -25,7 +25,7 @@
           type="image/png"
           sizes="16x16"
           href="{% static 'images/favicons/favicon-16x16.png' %}" />
-    <link rel="manifest" href="/site.webmanifest" />
+    {% comment %} <link rel="manifest" href="/site.webmanifest" /> {% endcomment %}
     {% block css %}
       <!-- Latest compiled and minified Bootstrap CSS -->
       <link rel="stylesheet"
@@ -60,7 +60,7 @@
     {% block body %}
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-1">
         <div class="container-fluid">
-          <a class="navbar-brand" href="{% url 'tweet_list' %}">Tweet Scheduler</a>
+          <a class="navbar-brand" href="{% url 'tweet_list' %}">Note Scheduler</a>
           <button class="navbar-toggler"
                   type="button"
                   data-bs-toggle="collapse"
@@ -70,7 +70,7 @@
           <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="navbar-nav me-auto">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'tweet_create' %}">New Tweet</a>
+                <a class="nav-link" href="{% url 'tweet_create' %}">New Note</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'about' %}">About</a>

@@ -1,11 +1,12 @@
-<!-- templates/tweets/tweet_form.html -->
 {% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
 
 {% block title %}
   {% if form.instance.id %}
-    Editar Tweet
+    Editar Note
   {% else %}
-    Nuevo Tweet
+    Nuevo Note
   {% endif %}
 {% endblock title %}
 {% block content %}
@@ -13,9 +14,9 @@
     <div class="col">
       <h1>
         {% if form.instance.id %}
-          Editar Tweet
+          Editar Note
         {% else %}
-          Crear Nuevo Tweet
+          Crear Nuevo Note
         {% endif %}
       </h1>
     </div>
@@ -27,27 +28,7 @@
     <div class="card-body">
       <form method="post">
         {% csrf_token %}
-        <div class="mb-3">
-          <label for="{{ form.content.id_for_label }}" class="form-label">Contenido (máx. 280 caracteres)</label>
-          {{ form.content.errors }}
-          <textarea name="{{ form.content.name }}"
-                    id="{{ form.content.id_for_label }}"
-                    class="form-control"
-                    rows="4"
-                    maxlength="280"
-                    required>{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
-          <div class="form-text" id="charCount">0/280 caracteres</div>
-        </div>
-        <div class="mb-3">
-          <label for="{{ form.scheduled_time.id_for_label }}" class="form-label">Fecha y hora programada</label>
-          {{ form.scheduled_time.errors }}
-          <input type="datetime-local"
-                 name="{{ form.scheduled_time.name }}"
-                 id="{{ form.scheduled_time.id_for_label }}"
-                 class="form-control"
-                 value="{% if form.scheduled_time.value %}{{ form.scheduled_time.value|date:'Y-m-d\TH:i' }}{% endif %}" />
-          <div class="form-text">Deja en blanco para no programar y guardar como borrador</div>
-        </div>
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary">Guardar</button>
       </form>
     </div>
@@ -55,7 +36,7 @@
   <script>
     // Contador de caracteres
     document.addEventListener('DOMContentLoaded', function() {
-      const textarea = document.getElementById('{{ form.content.id_for_label }}');
+      const textarea = document.getElementById('id_content');
       const charCount = document.getElementById('charCount');
 
       function updateCharCount() {

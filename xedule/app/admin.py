@@ -1,11 +1,11 @@
 # tweets/admin.py
 from django.contrib import admin
 
-from .models import Tweet
+from .models import Note
 from .models import TwitterCredentials
 
 
-@admin.register(Tweet)
+@admin.register(Note)
 class TweetAdmin(admin.ModelAdmin):
     list_display = ("content", "status", "scheduled_time", "created_at", "published_at")
     list_filter = ("status", "created_at", "published_at")
