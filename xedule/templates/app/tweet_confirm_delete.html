@@ -2,19 +2,19 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Eliminar Tweet
+  Eliminar Note
 {% endblock title %}
 {% block content %}
   <div class="row mb-4">
     <div class="col">
-      <h1>Delete Tweet</h1>
+      <h1>Delete Note</h1>
     </div>
   </div>
   <div class="card">
     <div class="card-body">
-      <p class="card-text">Are you sure you want to delete this tweet?</p>
+      <p class="card-text">Are you sure you want to delete this note?</p>
       <blockquote class="blockquote">
-        <p>{{ tweet.content }}</p>
+        <p>{{ note.content }}</p>
       </blockquote>
       <form method="post">
         {% csrf_token %}

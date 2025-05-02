@@ -2,12 +2,12 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Bulk Upload Tweets
+  Bulk Upload Notes
 {% endblock title %}
 {% block content %}
   <div class="row mb-4">
     <div class="col">
-      <h1>Bulk Upload Tweets</h1>
+      <h1>Bulk Upload Notes</h1>
     </div>
     <div class="col-auto">
       <a href="{% url 'tweet_list' %}" class="btn btn-secondary">Back to list</a>
@@ -21,10 +21,16 @@
       <p>Upload an Excel file (.xlsx) with tweets to schedule. The file should contain the following columns:</p>
       <ul>
         <li>
-          <strong>content</strong> (required): The tweet text (maximum 280 characters)
+          <strong>content</strong> (required): The note text (maximum 280 characters)
         </li>
         <li>
-          <strong>scheduled_time</strong> (optional): When to publish the tweet (format: YYYY-MM-DD HH:MM:SS)
+          <strong>scheduled_time</strong> (optional): When to publish the note (format: YYYY-MM-DD HH:MM:SS)
+        </li>
+        <li>
+          <strong>publish_to_x</strong> (optional): To publish the note in X (format: yes, no)
+        </li>
+        <li>
+          <strong>publish_to_nostr</strong> (optional): To publish the note in Nostr (format: yes, no)
         </li>
       </ul>
       <p>

@@ -22,3 +22,4 @@ django-redis==5.4.0  # https://github.com/jazzband/django-redis
 tweepy==4.15.0  # https://github.com/tweepy/tweepy
 pandas==2.2.3  # https://github.com/pandas-dev/pandas
 openpyxl==3.1.5  # https://foss.heptapod.net/openpyxl/openpyxl
+nostr==0.0.2  # https://github.com/jeffthibault/python-nostr
